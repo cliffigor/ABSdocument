@@ -1,0 +1,185 @@
+\chapter{\LaTeX{}使用}
+
+\section{实用宏包介绍}
+\subsection{tcolorbox -- 漂亮的盒子}
+tcolorbox宏包能制作风格多样、非常漂亮的盒子，用来写书籍或者是一些比较花哨的文档时，可以使用。
+以下是一个例子：
+
+\begin{tcolorbox}[title = tcolorbox的官方文档链接]
+	\url{https://mirrors.bfsu.edu.cn/CTAN/macros/latex/contrib/tcolorbox/tcolorbox.pdf}
+\end{tcolorbox}
+\begin{tcolorbox}[title = tcolorbox的一些使用例子,colframe=red!50!white]
+	\url{https://mirrors.sustech.edu.cn/CTAN/macros/latex/contrib/tcolorbox/tcolorbox-example.pdf}
+\end{tcolorbox}
+
+特别是用来写Linux命令终端的时候，就非常的炫酷：
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Tex]
+		\newtcblisting{commanshell}{colback=black,colupper=white,colframe=yellow!75!black,listing only, listing options={style=tcblatex,language=sh},every listing line={\textcolor{red}{\small\ttfamily\bfseries root \$> }}}
+		\begin{commanshell}
+			ls -al
+			cd /usr/lib
+		\end{commanshell}
+	\end{lstlisting}
+	\tcblower
+	\newtcblisting{commanshell}{colback=black,colupper=white,colframe=yellow!75!black,listing only, listing options={style=tcblatex,language=sh},every listing line={\textcolor{red}{\small\ttfamily\bfseries root \$> }}}
+
+	\begin{commanshell}
+ls -al
+cd /usr/lib
+	\end{commanshell}
+\end{tcolorbox}
+这个宏包的用途还有很多，也可以用来放代码、定理、例子等等特殊环境。
+
+\subsection{lstinline命令}
+使用\lstinline$\lstinline|code|$命令来生成行内公式或者命令，会比\lstinline|\verb|命令好得多，不会突出空格。
+\begin{tcolorbox}[title = 使用verb的效果,colframe=blue]
+	\verb*|$mv source destination|
+\end{tcolorbox}
+\begin{tcolorbox}[title=使用lstinline的效果,colframe=orange!50!white]
+	\lstinline|$mv source destination|
+\end{tcolorbox}
+
+\subsection{printlen -- 输出纸张大小}
+在输出纸张开本大小的时候，可以在引入printlen宏包之后，使用\lstinline|\rndprintlength{\paperwidth}$\times$\rndprintlength{\paperheight}|命令，这样可以自动生成纸张大小，不用自己手动输入。
+\begin{tcolorbox}[title=效果,colframe=red]
+	开本：\rndprintlength{\paperwidth}$\times$\rndprintlength{\paperheight}
+\end{tcolorbox}
+
+\subsection{geometry -- 管理页面规格}
+geometry宏包可以灵活地管理页面规格，常用的参数有
+\begin{itemize}
+	\item paper可以设置纸张大小，具体的值有a4paper, a5paper, b6paper等等常见的纸张大小
+	\item paperwidth手动设置纸的宽度
+	\item paperheight手动设置纸的高度
+	\item landscape将纸水平放置，横向
+	\item left,right,top,bottom则是设置纸张的左右上下边距
+\end{itemize}
+一个使用范例为：
+\begin{lstlisting}[language=TeX]
+	\RequirePackage[%
+	a4paper,
+	left=3.17cm,
+	right=3.17cm,
+	top=2.54cm,
+	bottom=2.54cm,
+	]{geometry}
+\end{lstlisting}
+还有一个好用的参数: twoside，使用了这个参数以后，左边距和右边距的设置会翻页自动互换，很实用。
+
+
+\subsection{hologo -- 输出\TeX{}家族字体}
+导入\verb|hologo|宏包，就可以用\lstinline|\hologo{}|命令输出\TeX{}家族的特殊字体，比方说\hologo{XeLaTeX}, \hologo{LaTeX2e}, \hologo{LaTeXTeX}
+
+\subsection{makeidx -- 生成索引}
+生成索引需要用到makeidx宏包，在导言区导入后:
+\begin{enumerate}
+	\item	在正文索引关键字的位置使用\lstinline|\index{}|命令，这个命令就类似于\lstinline|\label|命令
+	\item 在想要生成的索引的地方(书的末尾)使用\lstinline|\printindex|命令
+	\item 使用\hologo{XeLaTeX}编译一遍
+	\item 在文档目录下打开终端，使用\lstinline|makeindex *.idx|命令(TeXstudio可以在工具栏选Tools-Index)
+	\item 再到文档中使用\hologo{XeLaTeX}编译一遍即可
+\end{enumerate}
+
+\subsection{forloop -- for循环}
+想在\LaTeX 中实现for循环，可以使用forloop宏包，配合上计数器(counter,可以当做int型变量来用)，就可以实现类似于其他语言中的循环语句。这个宏包中只定义了两个命令:\lstinline|\forloop|和\lstinline|\forLoop|，但后者已被弃用。
+
+\verb|\forloop|命令的语法为：
+\begin{lstlisting}
+\forloop[<step>]{<counter}{<initial value>}{<condition>}{<code>}
+\end{lstlisting}
+在此之前，先要创建一个计数器(类似于声明变量)
+\begin{lstlisting}
+\newcounter{<countername>}
+\end{lstlisting}
+下面是一个例子:
+\begin{lstlisting}
+\newcounter{ct} \forloop{ct}{1}{\value{ct} < 10}{\arabic{ct}}
+\end{lstlisting}
+输出：\newcounter{ct} \forloop{ct}{1}{\value{ct} < 10}{\arabic{ct}}
+
+\subsection{ean13isbn -- 生成ISBN条码}
+使用\lstinline|ean13isbn|这个宏包，就可以根据ISBN号打印出条码。
+
+但是这个命令比较奇怪，是通过在命令选项中传递参数的。不过也可以在使用\lstinline|\usepackage|命令时作为选项将ISBN传入。
+
+\lstinline|\EANisbn[SC5a,ISBN=978-80-7340-097-2]|
+
+这样就能生成一个带ISBN文本的条码了。
+\begin{center}
+	\hspace{1cm}\EANisbn[SC5a,ISBN=978-80-7340-097-2]
+\end{center}
+而使用\lstinline|\EAN|命令，可以生成不带文本的条码。
+\begin{center}
+	\hspace{1cm}\EAN 978-80-7340-097-2
+\end{center}
+
+需要注意的是，使用\lstinline|center|环境无法让条码居中，要用\lstinline|\hspace{•}|和\lstinline|\vspace{•}|配合使用，让条码改变位置，或者用Tikz调整位置。
+
+\subsection{pdfpages -- 插入PDF文件}
+对于像教学设计这种复杂又的表格，可以使用Word先制作好，再导出成PDF文件，再导入进\LaTeX 文档也是一种可行的方法。缺点是可能会有大量的空白，也没找着方法消除。
+
+首先导入\lstinline|pdfpages|宏包
+\begin{lstlisting}
+\usepackage{pdfpages}
+\end{lstlisting}
+在想导入的位置使用
+\begin{lstlisting}
+\includepdf[pages=-]{XXX.pdf}
+\end{lstlisting}
+就可以了。
+
+尝试过将此命令放置在\lstinline|figure|环境中，\lstinline|box|环境中，使用\lstinline|\vspace{•}, \vskip|命令，但都不能调整插入的PDF的位置，这个命令插入的PDF文件只会在页面中心生成，没法上下调整。
+
+也可以直接使用\lstinline|\includegraphics{•}|命令来导入PDF，但是每次只能导入一页，不太方便。
+
+\subsection{CTeX -- 中文字体设置}
+现在的CTeX宏包实际上已经可以自动检测用户使用的操作系统，配置相应的字体。不过可以在导入宏包的时候使用\lstinline|fontset=none|选项，然后再自己设定字体相关的参数。设定方法如下：
+\begin{lstlisting}
+	\setCJKmainfont{SimSun}[BoldFont=SimHei,ItalicFont=KaiTi]
+	\setCJKsansfont{KaiTi}[BoldFont = *~Bold]
+	\setCJKmonofont{FangSong}
+	\setCJKfamilyfont{zhsong}{SimSun}
+	\setCJKfamilyfont{zhhei}{SimHei}
+	\setCJKfamilyfont{zhfs}{FangSong}
+	\setCJKfamilyfont{zhkai}{KaiTi}
+	\NewDocumentCommand \songti{}{\CJKfamily {zhsong}}
+	\NewDocumentCommand \heiti{}{\CJKfamily {zhhei}}
+	\NewDocumentCommand \fangsong{}{\CJKfamily{zhfs}}
+	\NewDocumentCommand \kaishu{}{\CJKfamily{zhkai}}
+\end{lstlisting}
+
+\subsection{datetime2 -- 通过数字生成英文月份}
+导入\lstinline|datetime2-calc|和\lstinline|datetime2|宏包，使用
+\begin{lstlisting}
+\DTMshortmonthname{}
+\end{lstlisting}
+命令可以生成一个英文月份缩写，例如：\DTMshortmonthname{2}
+
+使用\begin{lstlisting}
+\DTMmonthname{}
+\end{lstlisting}
+命令，可以生成一个英文的完整的月份，例如：\DTMmonthname{2}
+
+如果想输出中文的日期时间，可以使用\lstinline|zhnumber|宏包。例如
+\begin{lstlisting}
+	\zhnumsetup{time=Chinese}
+	\zhtoday\zhcurrtime
+\end{lstlisting}
+
+\zhnumsetup{time=Chinese}
+\zhtoday\zhcurrtime
+\section{其他}
+\subsection{将页眉改为两条横线}
+\lstinline|fancyhdr|宏包提供的页眉横线只支持一条横线，但我们可以通过修改headrule的定义来实现页眉有两条横线的效果。
+\subsection{快速查看各种宏包文档}
+在命令行中使用\lstinline|texdoc 宏包名|命令可以快速打开宏包的文档，就不用去CTAN网站上再搜索了。
+
+\begin{lstlisting}
+	\newdimen\doublelineskip % 两横线间的距离
+	\setlength\doublelineskip{1pt}
+	\renewcommand\headrule{%
+		\hrule height\headrulewidth width\headwidth
+		\vskip \doublelineskip%
+		\hrule height\headrulewidth width\headwidth}
+\end{lstlisting}

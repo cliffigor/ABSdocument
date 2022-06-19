@@ -1,0 +1,77 @@
+\documentclass[lang=cn,10pt]{AbsBook}
+\usepackage[a4paper,
+			left=3.17cm,
+			right=3.17cm,
+			top=2.54cm,
+			bottom=2.54cm]{geometry}
+\tcbuselibrary{listings}
+\usepackage{forloop}
+\usepackage{datetime2}
+\usepackage{datetime2-calc}
+
+\title{Linux/\LaTeX{}使用技巧}
+%\subtitle{Abs\LaTeX{} 经典之作}
+
+\author{陈潇}
+\version{0.0.1}
+\Publisher{XX出版社}
+%\BookSeries{计算机科学系列丛书}
+
+\BookIntroduction{
+现在的AbsBook模板是将ElegantBook与ChenLaTeXBook两个模板进行组合得到的新模板，封面封底选了ChenLaTeXBook的设计，其余部分基本都是ElegantBook的设计，参考文献的生成方式改成了用\hologo{BibTeX}来生成，在书的末尾部分增加了索引。
+}
+\AuthorIntroduction{这里是一些测试文字。}
+
+\Innovation{著}					   %著、编、编著
+%------------扉页反面-----------
+\PublisherAddress{北京}			   %出版社地址
+\Price{5}							%价格
+
+\Word{500}							%字数, 单位: 千
+\CIP{555555}						%CIP数据核字号
+\isbn{978-7-03-071008-6}
+
+\RomanI{2135}						%
+\RomanIII{测试---使用---abcd}
+\RomanIV{I399}						%
+
+\Website{https://2tap.cf}			%网站
+\Prints{001-1000000}				%印数
+
+\setcounter{tocdepth}{3}
+% 本文档命令
+\usepackage{array}
+\newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
+
+% \definecolor{customcolor}{RGB}{32,178,170}
+% \colorlet{coverlinecolor}{customcolor}
+
+\makeindex
+\begin{document}
+
+\maketitle
+\makeflypage
+\frontmatter
+
+\tableofcontents
+
+\mainmatter
+
+\part{日常使用}
+
+\input{chapters/software}
+
+\part{生产开发}
+
+\input{chapters/LaTeX}
+
+
+% 新定义了\reference{style}{Bib file}命令
+%\reference{gbt7714-numerical}{BibTeX/BibTest}
+%% 生成索引
+%\cleardoublepage
+%\phantomsection\addcontentsline{toc}{chapter}{\texorpdfstring{索引}{索引}}
+%\printindex
+
+\makebackcover
+\end{document}
